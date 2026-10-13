@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "mendanywhere",
+  "version": "${version}",
+  "name": "Mend Anywhere",
+  "description": "Mending repairs items from XP anywhere in your inventory, not just what you hold or wear.",
+  "authors": [
+    "trevorschoeny"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/mend-anywhere",
+    "sources": "https://github.com/trevorschoeny/mend-anywhere"
+  },
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.trevorschoeny.mendanywhere.MendAnywhere"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "fabric-api": "*",
+    "minecraft": "~26.3",
+    "menukit": ">=7.1.0 <8.0.0",
+    "slotkit": ">=1.1.0 <2.0.0"
+  },
+  "custom": {
+    "configkit": {
+      "suite": "inventoryplus"
+    }
+  }
+}
