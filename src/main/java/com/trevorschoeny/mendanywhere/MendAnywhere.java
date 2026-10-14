@@ -31,8 +31,8 @@ public final class MendAnywhere implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        // Off leaves the pool exactly as vanilla's. ponytail: read once at init; a live
-        // toggle needs ConfigKit's server setting, so it comes with that move.
+        // Off leaves the pool exactly as vanilla's. Read once at init: a live toggle
+        // needs ConfigKit's server setting, so it comes with that move.
         if (!MendAnywhereSettings.enabled()) return;
         SlotOperations.inherent(SlotGroupCategory.PLAYER_INVENTORY, BehaviorKeys.MENDING, TriBool.TRUE);
         SlotOperations.inherent(SlotGroupCategory.PLAYER_HOTBAR, BehaviorKeys.MENDING, TriBool.TRUE);

@@ -2,8 +2,7 @@ package com.trevorschoeny.mendanywhere;
 
 /**
  * Mend Anywhere's settings, in one place so only this class changes when ConfigKit
- * lands (beryl-split.md, "Settings"). Until then each setting is a plain field at its
- * default. With ConfigKit it becomes:
+ * lands. Until then each setting is a plain field at its default. With ConfigKit it becomes:
  * <pre>
  * public static final Settings S = Settings.of("mendanywhere");
  * public static final Setting&lt;Boolean&gt; ENABLED = S.bool("enabled", true).server();
