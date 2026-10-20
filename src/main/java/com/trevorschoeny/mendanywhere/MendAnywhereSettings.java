@@ -17,5 +17,15 @@ public final class MendAnywhereSettings {
     // XP repair pool. Read on the server, at init.
     private static boolean enabled = true;
 
+    // Container mending, all off by default (Trev's call): the inventory's own slots
+    // already mend through the MENDING declarations, so these only widen the XP pool to
+    // what's nested inside.
+    private static boolean inShulkers = false;
+    private static boolean inBundles = false;
+    private static boolean inEnderChest = false;
+
     public static boolean enabled() { return enabled; }
+    public static boolean inShulkers() { return inShulkers; }
+    public static boolean inBundles() { return inBundles; }
+    public static boolean inEnderChest() { return inEnderChest; }
 }
