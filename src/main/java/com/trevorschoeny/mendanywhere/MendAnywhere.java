@@ -5,6 +5,7 @@ import com.trevlar.slotkit.api.item.ItemRef;
 import com.trevlar.slotkit.api.item.ItemScope;
 import com.trevlar.slotkit.api.item.ItemSources;
 import com.trevlar.slotkit.api.slot.MendingCandidates;
+import com.trevlar.menukit.api.panel.ModeScope;
 import com.trevlar.slotkit.api.window.BehaviorKeys;
 import com.trevlar.slotkit.api.window.SlotOperations;
 import com.trevlar.slotkit.api.window.TriBool;
@@ -50,8 +51,8 @@ public final class MendAnywhere implements ModInitializer {
         // Off leaves the pool exactly as vanilla's. Read once at init: a live toggle
         // needs ConfigKit's server setting, so it comes with that move.
         if (!MendAnywhereSettings.enabled()) return;
-        SlotOperations.inherent(SlotGroupCategory.PLAYER_INVENTORY, BehaviorKeys.MENDING, TriBool.TRUE);
-        SlotOperations.inherent(SlotGroupCategory.PLAYER_HOTBAR, BehaviorKeys.MENDING, TriBool.TRUE);
+        SlotOperations.inherent(ModeScope.BOTH, SlotGroupCategory.PLAYER_INVENTORY, BehaviorKeys.MENDING, TriBool.TRUE);
+        SlotOperations.inherent(ModeScope.BOTH, SlotGroupCategory.PLAYER_HOTBAR, BehaviorKeys.MENDING, TriBool.TRUE);
 
         MendingCandidates.register(player -> {
             ItemScope scope = ItemScope.inventory()
