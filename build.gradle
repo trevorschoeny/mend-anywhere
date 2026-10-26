@@ -1,6 +1,6 @@
 // Mend Anywhere. XP repairs Mending items anywhere in the main inventory and hotbar.
-// Universal jar that only has work to do on the server: it declares SlotKit's MENDING
-// behaviour on two slot categories and has no client code, no mixins, and no slots.
+// Universal jar: it declares SlotKit's MENDING behaviour on two slot categories and has
+// no mixins and no slots. Inventory Plus is optional and only hosts the settings tab.
 //
 // Included from the root settings.gradle as `:mend-anywhere`. Build with
 // `./gradlew :mend-anywhere:build` from the workspace root.
@@ -25,13 +25,17 @@ java {
 
 repositories {
     maven { url 'https://maven.fabricmc.net/' }
+    // Not for this mod. Inventory Plus (compile-only, below) depends on Keybindery,
+    // which depends on YACL, whose 26.x builds are only here.
+    maven { url 'https://api.modrinth.com/maven' }
 }
 
-// MenuKit and SlotKit have separate main and client source sets. This mod compiles
-// against main only; their client halves are added to the dev runtime by output, which
+// MenuKit, SlotKit and Inventory Plus have separate main and client source sets. A
+// project dependency sees only main, so their client halves are added by output, which
 // needs them evaluated first. A published jar holds both halves.
 evaluationDependsOn(':menukit')
 evaluationDependsOn(':slotkit')
+evaluationDependsOn(':inventory-plus')
 
 dependencies {
     // 26.x is unobfuscated: no mappings line, and plain Java configurations.
@@ -43,13 +47,18 @@ dependencies {
     // SlotKit's own dependency.
     implementation project(':menukit')
     implementation project(':slotkit')
-
-    // Their client halves, for the dev client only (this mod has no client code).
-    localRuntime rootProject.project(':menukit').sourceSets.client.output
-    localRuntime rootProject.project(':slotkit').sourceSets.client.output
 }
 
 loom {
+    // src/main holds what a server loads (the MENDING declarations); src/client holds
+    // the Inventory Plus tab. The compiler refuses a main class that reaches a client one.
+    splitEnvironmentSourceSets()
+    mods {
+        mendanywhere {
+            sourceSet sourceSets.main
+            sourceSet sourceSets.client
+        }
+    }
     runs {
         client { ideConfigGenerated = false }
         server { ideConfigGenerated = false }
@@ -62,6 +71,17 @@ loom {
             ideConfigGenerated = false
         }
     }
+}
+
+// Client-only dependencies, after loom {} so its client configurations exist.
+dependencies {
+    clientImplementation rootProject.project(':menukit').sourceSets.client.output
+    clientImplementation rootProject.project(':slotkit').sourceSets.client.output
+
+    // Inventory Plus is optional ("suggests"). Its API is compiled against and never
+    // bundled; only the `ip` package touches it, and only when IP is loaded.
+    clientCompileOnly project(':inventory-plus')
+    clientCompileOnly rootProject.project(':inventory-plus').sourceSets.client.output
 }
 
 // Self-checks: Fabric client gametests in src/gametest, run with `./gradlew :mend-anywhere:runClientGameTest`.
@@ -115,6 +135,7 @@ modrinth {
         required.project "fabric-api"
         required.project "menukit"
         required.project "slotkit"
+        optional.project "inventory-plus"
     }
 }
 

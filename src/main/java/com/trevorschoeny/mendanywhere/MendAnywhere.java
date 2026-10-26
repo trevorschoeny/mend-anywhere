@@ -13,6 +13,9 @@ import com.trevlar.slotkit.api.window.TriBool;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.world.item.ItemStack;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,23 +41,33 @@ import java.util.List;
  * only what's nested, and the ender chest's own slots, are added here to avoid handing
  * the same item to the pool twice.
  *
- * <p>Server side only: a declaration builds no slots, so there is no {@code slotkit}
- * block in fabric.mod.json and nobody is ever refused. A vanilla client on a server
- * with this mod gets the wider mending and just sees the durability change.
+ * <p>A declaration builds no slots, so there is no {@code slotkit} block in fabric.mod.json
+ * and nobody is ever refused. A vanilla client on a server with this mod gets the wider
+ * mending and just sees the durability change. The only client code is the settings tab
+ * ({@code com.trevorschoeny.mendanywhere.ip}), which exists only with Inventory Plus
+ * installed.
  */
 public final class MendAnywhere implements ModInitializer {
 
     public static final String MOD_ID = "mendanywhere";
+    static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     @Override
     public void onInitialize() {
-        // Off leaves the pool exactly as vanilla's. Read once at init: a live toggle
-        // needs ConfigKit's server setting, so it comes with that move.
-        if (!MendAnywhereSettings.enabled()) return;
+        MendAnywhereSettings.load();
+
+        // Declared unconditionally so the category rung always exists; the On/Off setting
+        // is enforced live by the veto below instead of by skipping the declaration, so
+        // toggling it in the settings menu takes effect without a relaunch.
         SlotOperations.inherent(ModeScope.BOTH, SlotGroupCategory.PLAYER_INVENTORY, BehaviorKeys.MENDING, TriBool.TRUE);
         SlotOperations.inherent(ModeScope.BOTH, SlotGroupCategory.PLAYER_HOTBAR, BehaviorKeys.MENDING, TriBool.TRUE);
+        SlotOperations.veto(ModeScope.BOTH, (slot, operation) ->
+                operation == BehaviorKeys.MENDING && !MendAnywhereSettings.enabled()
+                        && (slot.category() == SlotGroupCategory.PLAYER_INVENTORY
+                                || slot.category() == SlotGroupCategory.PLAYER_HOTBAR));
 
         MendingCandidates.register(player -> {
+            if (!MendAnywhereSettings.enabled()) return List.of();
             ItemScope scope = ItemScope.inventory()
                     .enderChest(MendAnywhereSettings.inEnderChest())
                     .shulkers(MendAnywhereSettings.inShulkers())

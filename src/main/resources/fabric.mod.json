@@ -16,6 +16,9 @@
   "entrypoints": {
     "main": [
       "com.trevorschoeny.mendanywhere.MendAnywhere"
+    ],
+    "client": [
+      "com.trevorschoeny.mendanywhere.MendAnywhereClient"
     ]
   },
   "depends": {
@@ -24,6 +27,9 @@
     "minecraft": "~26.3",
     "menukit": ">=7.5.0 <8.0.0",
     "slotkit": ">=2.2.0 <3.0.0"
+  },
+  "suggests": {
+    "inventoryplus": "*"
   },
   "custom": {
     "configkit": {
