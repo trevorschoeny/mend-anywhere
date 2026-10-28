@@ -118,7 +118,7 @@ processResources {
 // Lead @ Trevlar Mods owns the publish.
 modrinth {
     token = System.getenv("MODRINTH_TOKEN")
-    projectId = "mend-anywhere"
+    projectId = "UF3qiE5j"
     versionNumber = property('mendanywhere_version')
     versionName = "Mend Anywhere ${property('mendanywhere_version')}"
     versionType = "release"
