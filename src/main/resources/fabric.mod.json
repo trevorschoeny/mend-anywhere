@@ -4,6 +4,7 @@
   "version": "${version}",
   "name": "Mend Anywhere",
   "description": "Mending repairs items from XP anywhere in your inventory, not just what you hold or wear.",
+  "icon": "assets/mendanywhere/icon.png",
   "authors": [
     "trevorschoeny"
   ],
